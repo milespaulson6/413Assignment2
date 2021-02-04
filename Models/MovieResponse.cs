@@ -13,7 +13,7 @@ namespace _413Assignment2.Models
         [Required(ErrorMessage = "Title is required")]
         public string Title { get; set; }
         [Required(ErrorMessage = "Year is required")]
-        public int Year { get; set; }
+        public int? Year { get; set; }
         [Required(ErrorMessage = "Director is required")]
 
         public string Director { get; set; }
