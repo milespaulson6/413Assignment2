@@ -5,9 +5,11 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace _413Assignment2.Models
-{
+{//this is the class that reads each of my variables
     public class MovieResponse
     {
+        [Key]
+        public int MovieID { get; set; }
         [Required(ErrorMessage="Category is required")]
         public string Category { get; set; }
         [Required(ErrorMessage = "Title is required")]

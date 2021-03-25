@@ -10,6 +10,7 @@ namespace _413Assignment2.Models
         private static List<MovieResponse> applications = new List<MovieResponse>();
 
         public static IEnumerable<MovieResponse> Applications => applications;
+        
 
         public static void AddApplication(MovieResponse application)
         {

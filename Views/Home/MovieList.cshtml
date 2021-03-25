@@ -5,20 +5,22 @@
     ViewBag.Title = "Joel Hiltons Movie List";
 }
 
-@model IEnumerable<_413Assignment2.Models.MovieResponse>
-
+@model IQueryable<MovieResponse>
 <div>
     <h2>Here are all the movies in the list</h2>
+    <br />
+    <br />
 
-    <table>
-        <thead>
-            <tr><th>Category</th><th>Title</th><th>Year</th><th>Director</th><th>Rating</th><th>Edited</th><th>Lent To</th><th>Notes</th></tr>
+    <table class="table-hover table-striped table-bordered table-layout: auto">
+        <thead class="text-center">
+            <tr><th>MovieID</th><th>Category</th><th>Title</th><th>Year</th><th>Director</th><th>Rating</th><th>Edited</th><th>Lent To</th><th>Notes</th></tr>
         </thead>
 
-        <tbody>
-            @foreach (_413Assignment2.Models.MovieResponse x in Model)
+        <tbody class="text-center">
+            @foreach (var x in Model)
             {
                 <tr>
+                    <td style="background-color:lightblue">@x.MovieID</td>
                     <td>@x.Category</td>
                     <td>@x.Title</td>
                     <td>@x.Year</td>
@@ -27,10 +29,32 @@
                     <td>@x.Edited</td>
                     <td>@x.LentTo</td>
                     <td>@x.Notes </td>
+                    <td>
+                        <form method="post" asp-action="EditMovie">
+                            <input type="hidden" id="movieid" name="movieid" value="@x.MovieID" />
+                            <input type="hidden" id="category" name="category" value="@x.Category" />
+                            <input type="hidden" id="title" name="title" value="@x.Title" />
+                            <input type="hidden" id="year" name="year" value="@x.Year" />
+                            <input type="hidden" id="director" name="director" value="@x.Director" />
+                            <input type="hidden" id="rating" name="rating" value="@x.Rating" />
+                            <input type="hidden" id="edited" name="edited" value="@x.Edited" />
+                            <input type="hidden" id="lentto" name="lentto" value="@x.LentTo" />
+                            <input type="hidden" id="notes" name="notes" value="@x.Notes" />
+                            <button type="submit" class="btn btn-success">Edit</button>
+                        </form>
+                    </td>
+                    <td>
+                        <form method="post" asp-action="DeleteMovie">
+                            <input type="hidden" id="movieid" name="movieid" value="@x.MovieID" />
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    </td>
+
                 </tr>
             }
         </tbody>
     </table>
-
+    <br />
+    <br />
     <a asp-action="Index">Click here to return to main page</a>
 </div>

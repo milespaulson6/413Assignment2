@@ -1,5 +1,6 @@
 ﻿using _413Assignment2.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -12,10 +13,14 @@ namespace _413Assignment2.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private IMovieRepository _repository;
+        private MovieListContext context { get; set; }
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IMovieRepository repository, MovieListContext cont)
         {
             _logger = logger;
+            _repository = repository;
+            context = cont;
         }
 
         public IActionResult Index()
@@ -39,7 +44,8 @@ namespace _413Assignment2.Controllers
         {
             if (ModelState.IsValid)
             {
-                TempStorage.AddApplication(appResponse);
+                context.Movies.Add(appResponse);
+                context.SaveChanges();
                 return View("Confirmation", appResponse);
             }
             else
@@ -49,11 +55,51 @@ namespace _413Assignment2.Controllers
            
         }
 
+        public IActionResult EditMovie(MovieResponse yeet)
+        {
+            //context.Movies.Where(x => x.MovieID == movieid);
+            //_repository.Movies.Where(x => x.MovieID == yeet.MovieID);
+
+            ViewBag.MovieID = yeet.MovieID;
+            ViewBag.Category = yeet.Category;
+            ViewBag.Title = yeet.Title;
+            ViewBag.Year = yeet.Year;
+            ViewBag.Director = yeet.Director;
+            ViewBag.Rating = yeet.Rating;
+            ViewBag.Edited = yeet.Edited;
+            ViewBag.Lent = yeet.LentTo;
+            ViewBag.Notes = yeet.Notes;
+
+            
+            return View();
+        }
+
+        public IActionResult SaveChange(MovieResponse mov)
+        {
+            //context.Movies.Where(t => t.MovieID == movieid).FirstOrDefault();
+            
+            context.Movies.Update(mov);
+            context.SaveChanges();
+            IQueryable<MovieResponse> query = context.Movies;
+            return View("MovieList", query);
+
+        }
+
+        public IActionResult DeleteMovie(MovieResponse yeet)
+        {
+            context.Movies.Remove(yeet);
+            context.SaveChanges();
+            IQueryable<MovieResponse> query = context.Movies;
+            return View("MovieList", query);
+        }
         public IActionResult MovieList()
         {
 
-            
-            return View(TempStorage.Applications.Where(movie => movie.Title != "Independence Day"));
+            //
+
+      
+            return View(_repository.Movies.Where(movie => movie.Title != "Independence Day"));
+            //
         }
         public IActionResult Privacy()
         {
